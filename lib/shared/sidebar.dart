@@ -1,8 +1,10 @@
 import 'package:contoh/provider/state.dart';
+import 'package:contoh/routes/router.dart';
 import 'package:contoh/shared/drawer_button.dart';
 import 'package:contoh/shared/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class Sidebar extends ConsumerWidget {
   const Sidebar({
@@ -14,6 +16,7 @@ class Sidebar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = GoRouter.of(context);
     return Consumer(
       builder: (context, ref, _) {
         bool isSidebar = ref.watch(sidebarProvider.state).state;
@@ -34,17 +37,17 @@ class Sidebar extends ConsumerWidget {
                   margin: const EdgeInsets.only(top: 20),
                   child: isSidebar
                       ? DrawerButton(
-                          active: false,
-                          onPressed: () {},
+                          active: router.location == "/" ? true : false,
+                          onPressed: () => router.goNamed("home"),
                           text: "Home",
                           icon: const Icon(
                             Icons.home,
                           ),
                         )
                       : CustomIconButton(
-                          active: false,
+                          active: router.location == "/" ? true : false,
                           icon: const Icon(Icons.home),
-                          onPressed: () {},
+                          onPressed: () => router.goNamed("home"),
                         ),
                 ),
                 Container(
@@ -52,7 +55,7 @@ class Sidebar extends ConsumerWidget {
                   margin: const EdgeInsets.only(top: 20),
                   child: isSidebar
                       ? DrawerButton(
-                          active: false,
+                          active: router.location == "/favorite" ? true : false,
                           onPressed: () {},
                           text: "Favorite",
                           icon: const Icon(
@@ -60,7 +63,7 @@ class Sidebar extends ConsumerWidget {
                           ),
                         )
                       : CustomIconButton(
-                          active: false,
+                          active: router.location == "/favorite" ? true : false,
                           icon: const Icon(Icons.favorite),
                           onPressed: () {},
                         ),
@@ -70,17 +73,17 @@ class Sidebar extends ConsumerWidget {
                   margin: const EdgeInsets.only(top: 20),
                   child: isSidebar
                       ? DrawerButton(
-                          active: true,
-                          onPressed: () {},
+                          active: router.location == "/movies" ? true : false,
+                          onPressed: () => router.goNamed("movie"),
                           text: "Movies",
                           icon: const Icon(
                             Icons.movie,
                           ),
                         )
                       : CustomIconButton(
-                          active: true,
+                          active: router.location == "/movies" ? true : false,
                           icon: const Icon(Icons.movie),
-                          onPressed: () {},
+                          onPressed: () => router.goNamed("movie"),
                         ),
                 ),
                 Container(
@@ -88,7 +91,8 @@ class Sidebar extends ConsumerWidget {
                   margin: const EdgeInsets.only(top: 20),
                   child: isSidebar
                       ? DrawerButton(
-                          active: false,
+                          active:
+                              router.location == "/categories" ? true : false,
                           onPressed: () {},
                           text: "Genres",
                           icon: const Icon(
@@ -96,7 +100,8 @@ class Sidebar extends ConsumerWidget {
                           ),
                         )
                       : CustomIconButton(
-                          active: false,
+                          active:
+                              router.location == "/categories" ? true : false,
                           icon: const Icon(Icons.category),
                           onPressed: () {},
                         ),
