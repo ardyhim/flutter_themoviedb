@@ -56,7 +56,14 @@ class Sidebar extends ConsumerWidget {
                   child: isSidebar
                       ? DrawerButton(
                           active: router.location == "/favorite" ? true : false,
-                          onPressed: () {},
+                          onPressed: () {
+                            router.goNamed(
+                              "detail_movie",
+                              params: {
+                                "id": "1",
+                              },
+                            );
+                          },
                           text: "Favorite",
                           icon: const Icon(
                             Icons.favorite,
@@ -65,7 +72,14 @@ class Sidebar extends ConsumerWidget {
                       : CustomIconButton(
                           active: router.location == "/favorite" ? true : false,
                           icon: const Icon(Icons.favorite),
-                          onPressed: () {},
+                          onPressed: () {
+                            router.goNamed(
+                              "detail_movie",
+                              params: {
+                                "id": "1",
+                              },
+                            );
+                          },
                         ),
                 ),
                 Container(

@@ -1,7 +1,10 @@
 import 'package:contoh/provider/api.dart';
+import 'package:contoh/provider/notifierr.dart';
+import 'package:contoh/repository/movie_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_api/tmdb_api.dart';
+
+import '../../provider/state.dart';
 
 class MoviesView extends ConsumerWidget {
   MoviesView({
@@ -57,9 +60,11 @@ class MoviesView extends ConsumerWidget {
       widthCard =
           (width - ((crossAxisCount - 1) * crossAxisSpacing)) / crossAxisCount;
     }
-
-    TextEditingController _search = TextEditingController(text: "");
-    AsyncValue<Map> movies = ref.watch(movieProvider);
+    AsyncValue movies = ref.watch(movieProvider);
+    List movieList = ref.watch(movieListProvider);
+    final movieRepository = ref.read(movieRepositoryProvider);
+    TextEditingController search =
+        TextEditingController(text: movieRepository.keyword);
     return movies.when(
       data: (data) {
         return CustomScrollView(
@@ -73,22 +78,42 @@ class MoviesView extends ConsumerWidget {
                   vertical: 20,
                 ),
                 child: TextFormField(
-                  controller: _search,
+                  controller: search,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.search,
-                  onFieldSubmitted: (String value) {
-                    print(value);
-                    print(widthCard);
+                  onFieldSubmitted: (String value) async {
+                    ref.read(movieRepositoryProvider).keyword = value;
+                    ref.read(movieTypeProvider.state).state = MovieType.search;
+                    movieRepository.type = MovieType.search;
+                    // ref.refresh(movieProvider);
+                    ref.refresh(movieListProvider);
+                    movieRepository.page = movieRepository.page + 1;
+                    var result = await movieRepository.fetchSearch();
+                    ref.read(movieListProvider.notifier).addMovie(result);
                   },
                   decoration: InputDecoration(
                     labelText: "Search Movies",
                     suffixIcon: GestureDetector(
-                      onTap: () {
-                        print(_search.text);
+                      onTap: () async {
+                        ref.refresh(movieListProvider);
+                        if (movieRepository.type == MovieType.trending) {
+                          movieRepository.type = MovieType.search;
+                          movieRepository.page = movieRepository.page + 1;
+                          var result = await movieRepository.fetchSearch();
+                          ref.read(movieListProvider.notifier).addMovie(result);
+                        } else {
+                          movieRepository.type = MovieType.trending;
+                          movieRepository.keyword = "";
+                          movieRepository.page = movieRepository.page + 1;
+                          var result = await movieRepository.fetchPopular();
+                          ref.read(movieListProvider.notifier).addMovie(result);
+                        }
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.search),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: movieRepository.type == MovieType.trending
+                            ? const Icon(Icons.search)
+                            : const Icon(Icons.close),
                       ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
@@ -124,7 +149,7 @@ class MoviesView extends ConsumerWidget {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              "https://image.tmdb.org/t/p/w500${data["results"][i]["poster_path"]}",
+                              "https://image.tmdb.org/t/p/w500${movieList[i]["poster_path"]}",
                             ),
                           ),
                         ),
@@ -144,7 +169,7 @@ class MoviesView extends ConsumerWidget {
                                   color: Theme.of(context).colorScheme.surface,
                                 ),
                                 child: Text(
-                                  "${data["results"][i]["vote_average"]}",
+                                  "${movieList[i]["vote_average"]}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge!
@@ -161,11 +186,12 @@ class MoviesView extends ConsumerWidget {
                               child: Container(
                                 height: 100,
                                 width: widthCard - 40,
-                                padding: EdgeInsets.symmetric(vertical: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Text(
-                                    "${data["results"][i]["title"]}",
+                                    "${movieList[i]["title"]}",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
@@ -181,9 +207,34 @@ class MoviesView extends ConsumerWidget {
                     ),
                   );
                 },
-                childCount: 20,
+                childCount: movieList.length,
               ),
-            )
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                child: movieRepository.isMore
+                    ? TextButton(
+                        onPressed: () async {
+                          movieRepository.page = movieRepository.page + 1;
+                          if (movieRepository.type == MovieType.trending) {
+                            var result = await movieRepository.fetchPopular();
+                            ref
+                                .read(movieListProvider.notifier)
+                                .addMovie(result);
+                          } else {
+                            var result = await movieRepository.fetchSearch();
+                            ref
+                                .read(movieListProvider.notifier)
+                                .addMovie(result);
+                          }
+                        },
+                        child: Text(
+                          "PAGINATION",
+                        ),
+                      )
+                    : Text("NO MORE"),
+              ),
+            ),
           ],
         );
       },
@@ -191,7 +242,7 @@ class MoviesView extends ConsumerWidget {
         return Container();
       },
       loading: () {
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }
