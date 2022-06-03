@@ -11,15 +11,17 @@ final router = GoRouter(
       builder: (context, state) => const HomePage(),
     ),
     GoRoute(
-        path: '/movies',
-        name: "movie",
-        builder: (context, state) => const MoviePage(),
-        routes: [
-          GoRoute(
-            path: ':id',
-            name: "detail_movie",
-            builder: (context, state) => const DetailPage(),
-          ),
-        ]),
+      path: '/movies',
+      name: "movie",
+      builder: (context, state) => const MoviePage(),
+      routes: [
+        GoRoute(
+          path: ':id',
+          name: "detail_movie",
+          builder: (context, state) =>
+              DetailPage(id: int.parse(state.params['id']!)),
+        ),
+      ],
+    ),
   ],
 );

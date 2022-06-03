@@ -1,8 +1,8 @@
 import 'package:contoh/provider/api.dart';
-import 'package:contoh/provider/notifierr.dart';
 import 'package:contoh/repository/movie_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../provider/state.dart';
 
@@ -60,6 +60,7 @@ class MoviesView extends ConsumerWidget {
       widthCard =
           (width - ((crossAxisCount - 1) * crossAxisSpacing)) / crossAxisCount;
     }
+    final router = GoRouter.of(context);
     AsyncValue movies = ref.watch(movieProvider);
     List movieList = ref.watch(movieListProvider);
     final movieRepository = ref.read(movieRepositoryProvider);
@@ -142,66 +143,78 @@ class MoviesView extends ConsumerWidget {
                       vertical: 10,
                     ),
                     child: Card(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              "https://image.tmdb.org/t/p/w500${movieList[i]["poster_path"]}",
-                            ),
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 10,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Theme.of(context).colorScheme.surface,
-                                ),
-                                child: Text(
-                                  "${movieList[i]["vote_average"]}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge!
-                                      .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                ),
+                      child: GestureDetector(
+                        onTap: () {
+                          router.goNamed(
+                            "detail_movie",
+                            params: {
+                              "id": movieList[i]["id"].toString(),
+                            },
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                "https://image.tmdb.org/t/p/w500${movieList[i]["poster_path"]}",
                               ),
                             ),
-                            Positioned(
-                              bottom: 0,
-                              child: Container(
-                                height: 100,
-                                width: widthCard - 40,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                  ),
                                   child: Text(
-                                    "${movieList[i]["title"]}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
+                                    "${movieList[i]["vote_average"]}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                        ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  height: 100,
+                                  width: widthCard - 40,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Text(
+                                      "${movieList[i]["title"]}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -1,7 +1,8 @@
-import 'package:contoh/provider/notifierr.dart';
-import 'package:contoh/provider/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:contoh/provider/state.dart';
+import '../model/detail.dart';
+import './notifier/notifier.dart';
 
 import '../repository/repository.dart';
 
@@ -45,4 +46,18 @@ final movieProvider = FutureProvider(
 final movieListProvider =
     StateNotifierProvider<MovieListNotifier, List<dynamic>>((ref) {
   return MovieListNotifier();
+});
+
+final detailProvider = FutureProvider.family<ModelDetail, int>((ref, id) async {
+  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
+  final credit = await tmdb.v3.movies.getCredits(id);
+  final movie = await tmdb.v3.movies.getDetails(id);
+  final review = await tmdb.v3.movies.getReviews(id);
+  final video = await tmdb.v3.movies.getVideos(id);
+  return ModelDetail(
+    credit: credit,
+    movie: movie,
+    review: review,
+    video: video,
+  );
 });

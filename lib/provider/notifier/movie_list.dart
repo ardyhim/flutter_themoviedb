@@ -6,9 +6,4 @@ class MovieListNotifier extends StateNotifier<List<dynamic>> {
   addMovie(List<dynamic> data) {
     state = [...state, ...data];
   }
-
-  clear() {
-    print(List.empty(growable: true));
-    state = [...state, List.empty(growable: true)];
-  }
 }
