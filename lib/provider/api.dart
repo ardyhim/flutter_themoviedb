@@ -1,25 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_api/tmdb_api.dart';
-import 'package:contoh/provider/state.dart';
-import '../model/detail.dart';
-import './notifier/notifier.dart';
-
+import '../model/model.dart';
 import '../repository/repository.dart';
-
-final moviePopularProvider = FutureProvider(((ref) async {
-  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
-  return tmdb.v3.movies.getPopular(page: 1);
-}));
-
-final movieLatestProvider = FutureProvider(((ref) async {
-  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
-  return tmdb.v3.movies.getLatest();
-}));
-
-final movieUpcomingProvider = FutureProvider(((ref) async {
-  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
-  return tmdb.v3.movies.getUpcoming();
-}));
+import 'state.dart';
 
 final movieProvider = FutureProvider(
   ((ref) async {
@@ -43,9 +25,36 @@ final movieProvider = FutureProvider(
   }),
 );
 
-final movieListProvider =
-    StateNotifierProvider<MovieListNotifier, List<dynamic>>((ref) {
-  return MovieListNotifier();
+final tvProvider = FutureProvider(
+  ((ref) async {
+    final tvRepository = ref.read(tvRepositoryProvider);
+    final tvList = ref.read(tvListProvider.notifier);
+    final TvType type = tvRepository.type;
+    switch (type) {
+      case TvType.trending:
+        var result = await tvRepository.fetchPopular();
+        tvList.addTv(result);
+        return tvList;
+      case TvType.search:
+        var result = await tvRepository.fetchSearch();
+        tvList.addTv(result);
+        return tvList;
+      default:
+        var result = await tvRepository.fetchPopular();
+        tvList.addTv(result);
+        return tvList;
+    }
+  }),
+);
+
+final homeProvider = FutureProvider((ref) async {
+  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
+  final upComing = await tmdb.v3.movies.getUpcoming();
+  final popular = await tmdb.v3.movies.getPopular();
+  return ModelHome(
+    upComing: upComing,
+    popular: popular,
+  );
 });
 
 final detailProvider = FutureProvider.family<ModelDetail, int>((ref, id) async {

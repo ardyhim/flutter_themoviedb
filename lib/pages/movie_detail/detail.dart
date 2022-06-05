@@ -1,15 +1,10 @@
-import 'package:contoh/pages/detail/item_review.dart';
 import 'package:contoh/provider/api.dart';
-import 'package:contoh/provider/state.dart';
-import 'package:contoh/repository/repository.dart';
 import 'package:contoh/utils/mapping.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'item_people.dart';
+import 'item_review.dart';
 
 class DetailPage extends ConsumerWidget {
   DetailPage({Key? key, required this.id}) : super(key: key);

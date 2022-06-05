@@ -1,7 +1,9 @@
-import 'package:contoh/pages/detail/detail.dart';
-import 'package:contoh/pages/home/home.dart';
-import 'package:contoh/pages/movie/movie.dart';
 import 'package:go_router/go_router.dart';
+
+import '../pages/home/home.dart';
+import '../pages/movie/movie.dart';
+import '../pages/movie_detail/detail.dart';
+import '../pages/tv/tv.dart';
 
 final router = GoRouter(
   routes: [
@@ -18,6 +20,19 @@ final router = GoRouter(
         GoRoute(
           path: ':id',
           name: "detail_movie",
+          builder: (context, state) =>
+              DetailPage(id: int.parse(state.params['id']!)),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/tv',
+      name: "tv",
+      builder: (context, state) => const TvPage(),
+      routes: [
+        GoRoute(
+          path: ':id',
+          name: "detail_tv",
           builder: (context, state) =>
               DetailPage(id: int.parse(state.params['id']!)),
         ),

@@ -32,117 +32,161 @@ class Sidebar extends ConsumerWidget {
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
               children: [
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: isSidebar
-                      ? DrawerButton(
-                          active: router.location == "/" ? true : false,
-                          onPressed: () => router.goNamed("home"),
-                          text: "Home",
-                          icon: const Icon(
-                            Icons.home,
+                Tooltip(
+                  message: "Home",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active: router.location == "/" ? true : false,
+                            onPressed: () => router.goNamed("home"),
+                            text: "Home",
+                            icon: const Icon(
+                              Icons.home,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active: router.location == "/" ? true : false,
+                            icon: const Icon(Icons.home),
+                            onPressed: () => router.goNamed("home"),
                           ),
-                        )
-                      : CustomIconButton(
-                          active: router.location == "/" ? true : false,
-                          icon: const Icon(Icons.home),
-                          onPressed: () => router.goNamed("home"),
-                        ),
+                  ),
                 ),
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: isSidebar
-                      ? DrawerButton(
-                          active: router.location == "/favorite" ? true : false,
-                          onPressed: () {
-                            router.goNamed(
-                              "detail_movie",
-                              params: {
-                                "id": "1",
-                              },
-                            );
-                          },
-                          text: "Favorite",
-                          icon: const Icon(
-                            Icons.favorite,
+                Tooltip(
+                  message: "Favorite",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active:
+                                router.location == "/favorite" ? true : false,
+                            onPressed: () {
+                              router.goNamed(
+                                "detail_movie",
+                                params: {
+                                  "id": "1",
+                                },
+                              );
+                            },
+                            text: "Favorite",
+                            icon: const Icon(
+                              Icons.favorite,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active:
+                                router.location == "/favorite" ? true : false,
+                            icon: const Icon(Icons.favorite),
+                            onPressed: () {
+                              router.goNamed(
+                                "detail_movie",
+                                params: {
+                                  "id": "1",
+                                },
+                              );
+                            },
                           ),
-                        )
-                      : CustomIconButton(
-                          active: router.location == "/favorite" ? true : false,
-                          icon: const Icon(Icons.favorite),
-                          onPressed: () {
-                            router.goNamed(
-                              "detail_movie",
-                              params: {
-                                "id": "1",
-                              },
-                            );
-                          },
-                        ),
+                  ),
                 ),
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: isSidebar
-                      ? DrawerButton(
-                          active: router.location == "/movies" ? true : false,
-                          onPressed: () => router.goNamed("movie"),
-                          text: "Movies",
-                          icon: const Icon(
-                            Icons.movie,
+                Tooltip(
+                  message: "Tv Series",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active: router.location == "/tv" ? true : false,
+                            onPressed: () {
+                              router.goNamed(
+                                "tv",
+                              );
+                            },
+                            text: "Tv Series",
+                            icon: const Icon(
+                              Icons.tv,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active: router.location == "/tv" ? true : false,
+                            icon: const Icon(Icons.tv),
+                            onPressed: () {
+                              router.goNamed("tv");
+                            },
                           ),
-                        )
-                      : CustomIconButton(
-                          active: router.location == "/movies" ? true : false,
-                          icon: const Icon(Icons.movie),
-                          onPressed: () => router.goNamed("movie"),
-                        ),
+                  ),
                 ),
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: isSidebar
-                      ? DrawerButton(
-                          active:
-                              router.location == "/categories" ? true : false,
-                          onPressed: () {},
-                          text: "Genres",
-                          icon: const Icon(
-                            Icons.category,
+                Tooltip(
+                  message: "Movies",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active: router.location == "/movies" ? true : false,
+                            onPressed: () => router.goNamed("movie"),
+                            text: "Movies",
+                            icon: const Icon(
+                              Icons.movie,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active: router.location == "/movies" ? true : false,
+                            icon: const Icon(Icons.movie),
+                            onPressed: () => router.goNamed("movie"),
                           ),
-                        )
-                      : CustomIconButton(
-                          active:
-                              router.location == "/categories" ? true : false,
-                          icon: const Icon(Icons.category),
-                          onPressed: () {},
-                        ),
+                  ),
                 ),
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: isSidebar
-                      ? DrawerButton(
-                          active: false,
-                          onPressed: () {
-                            final readSide = ref.read(sidebarProvider.state);
-                            readSide.state = false;
-                          },
-                          text: "Minimize",
-                          icon: const Icon(
-                            Icons.menu,
+                Tooltip(
+                  message: "Categories",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active:
+                                router.location == "/categories" ? true : false,
+                            onPressed: () {},
+                            text: "Genres",
+                            icon: const Icon(
+                              Icons.category,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active:
+                                router.location == "/categories" ? true : false,
+                            icon: const Icon(Icons.category),
+                            onPressed: () {},
                           ),
-                        )
-                      : CustomIconButton(
-                          active: false,
-                          icon: const Icon(Icons.menu_open),
-                          onPressed: () {
-                            final readSide = ref.read(sidebarProvider.state);
-                            readSide.state = true;
-                          },
-                        ),
+                  ),
+                ),
+                Tooltip(
+                  message: "Minimize",
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: isSidebar
+                        ? DrawerButton(
+                            active: false,
+                            onPressed: () {
+                              final readSide = ref.read(sidebarProvider.state);
+                              readSide.state = false;
+                            },
+                            text: "Minimize",
+                            icon: const Icon(
+                              Icons.menu,
+                            ),
+                          )
+                        : CustomIconButton(
+                            active: false,
+                            icon: const Icon(Icons.menu_open),
+                            onPressed: () {
+                              final readSide = ref.read(sidebarProvider.state);
+                              readSide.state = true;
+                            },
+                          ),
+                  ),
                 ),
               ],
             ),
