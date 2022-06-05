@@ -33,6 +33,7 @@ class Sidebar extends ConsumerWidget {
                   : MainAxisAlignment.center,
               children: [
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Home",
                   child: Container(
                     height: 50,
@@ -54,6 +55,7 @@ class Sidebar extends ConsumerWidget {
                   ),
                 ),
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Favorite",
                   child: Container(
                     height: 50,
@@ -91,6 +93,7 @@ class Sidebar extends ConsumerWidget {
                   ),
                 ),
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Tv Series",
                   child: Container(
                     height: 50,
@@ -118,6 +121,7 @@ class Sidebar extends ConsumerWidget {
                   ),
                 ),
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Movies",
                   child: Container(
                     height: 50,
@@ -139,6 +143,7 @@ class Sidebar extends ConsumerWidget {
                   ),
                 ),
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Categories",
                   child: Container(
                     height: 50,
@@ -162,6 +167,7 @@ class Sidebar extends ConsumerWidget {
                   ),
                 ),
                 Tooltip(
+                  verticalOffset: 40,
                   message: "Minimize",
                   child: Container(
                     height: 50,
