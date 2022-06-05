@@ -1,12 +1,18 @@
 import 'package:go_router/go_router.dart';
 
 import '../pages/home/home.dart';
+import '../pages/login/login.dart';
 import '../pages/movie/movie.dart';
 import '../pages/movie_detail/detail.dart';
 import '../pages/tv/tv.dart';
 
 final router = GoRouter(
   routes: [
+    GoRoute(
+      path: '/login',
+      name: "login",
+      builder: (context, state) => const LoginPage(),
+    ),
     GoRoute(
       path: '/',
       name: "home",

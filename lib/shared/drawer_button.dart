@@ -26,9 +26,6 @@ class DrawerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle labelText = Theme.of(context).textTheme.button!.copyWith(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        );
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
@@ -127,7 +124,8 @@ class DrawerButton extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "$text center",
+                  "$text",
+                  style: Theme.of(context).textTheme.button,
                 ),
               ),
             ),
