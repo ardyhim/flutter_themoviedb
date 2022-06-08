@@ -1,5 +1,7 @@
+import 'package:contoh/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../provider/api.dart';
 import '../../utils/mapping.dart';
@@ -11,6 +13,7 @@ class DetailPage extends ConsumerWidget {
   late int id;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = GoRouter.of(context);
     final detailWatch = ref.watch(detailProvider(id));
     return Scaffold(
       body: LayoutBuilder(
@@ -28,7 +31,7 @@ class DetailPage extends ConsumerWidget {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          "https://image.tmdb.org/t/p/original${data.movie["poster_path"]}",
+                          "https://image.tmdb.org/t/p/original${data.movie["backdrop_path"]}",
                         ),
                       ),
                     ),
@@ -62,8 +65,14 @@ class DetailPage extends ConsumerWidget {
                   ),
                   CustomScrollView(
                     slivers: [
-                      const SliverAppBar(
+                      SliverAppBar(
                         backgroundColor: Colors.transparent,
+                        leading: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                          ),
+                          onPressed: () => router.pop(),
+                        ),
                       ),
                       SliverToBoxAdapter(
                         child: SizedBox(

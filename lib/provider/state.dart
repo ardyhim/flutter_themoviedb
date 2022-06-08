@@ -56,7 +56,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     debugLogDiagnostics: true,
     refreshListenable: router,
-    // redirect: router.redirectLogic,
+    redirect: router.redirectLogic,
     routes: router.routes,
   );
 });

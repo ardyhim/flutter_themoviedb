@@ -22,6 +22,14 @@ final router = [
     path: '/account',
     name: "account",
     builder: (context, state) => const AccountPage(),
+    routes: [
+      GoRoute(
+        path: ':id',
+        name: "account_detail_movie",
+        builder: (context, state) =>
+            DetailPage(id: int.parse(state.params['id']!)),
+      ),
+    ],
   ),
   GoRoute(
     path: '/movies',

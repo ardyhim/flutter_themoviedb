@@ -22,7 +22,7 @@ class MyApp extends ConsumerWidget {
     final hive = ref.watch(hiveProvider);
     return hive.when(
       data: (data) => MaterialApp.router(
-        title: 'Flutter Demo',
+        title: 'Flutter Movies',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: darkColorScheme,

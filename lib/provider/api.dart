@@ -96,7 +96,7 @@ final accountFutureProvider = FutureProvider(((ref) async {
     try {
       var movie =
           await tmdb.v3.account.getFavoriteMovies(session, user.user.id!);
-      var tv = await tmdb.v3.account.getFavoriteMovies(session, user.user.id!);
+      var tv = await tmdb.v3.account.getFavoriteTvShows(session, user.user.id!);
       var tvWatchList =
           await tmdb.v3.account.getTvShowWatchList(session, user.user.id!);
       var movieWatchList =
