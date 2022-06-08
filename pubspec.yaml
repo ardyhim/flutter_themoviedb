@@ -37,6 +37,7 @@ dependencies:
   flutter_riverpod: ^1.0.4
   tmdb_api: ^2.1.2
   shimmer: ^2.0.0
+  hive: ^2.2.1
 
 dev_dependencies:
   flutter_test:
