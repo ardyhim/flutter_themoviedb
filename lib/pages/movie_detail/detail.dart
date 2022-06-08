@@ -1,8 +1,8 @@
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/utils/mapping.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../provider/api.dart';
+import '../../utils/mapping.dart';
 import 'item_people.dart';
 import 'item_review.dart';
 
@@ -19,9 +19,7 @@ class DetailPage extends ConsumerWidget {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            error: (err, stack) => Container(
-              child: Text("ERROR"),
-            ),
+            error: (err, stack) => const Text("ERROR"),
             data: (data) {
               return Stack(
                 children: [
@@ -118,7 +116,6 @@ class DetailPage extends ConsumerWidget {
                                 onPressed: () {
                                   var cast =
                                       MappingMovie().cast(data.credit["cast"]);
-                                  print(cast);
                                 },
                                 style: ButtonStyle(
                                   padding: MaterialStateProperty.all(

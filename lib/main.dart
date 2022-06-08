@@ -33,7 +33,7 @@ class MyApp extends ConsumerWidget {
         scrollBehavior: AppScrollBehavior(),
       ),
       error: (err, stack) {
-        print(err);
+        // print(err);
         return CustomError(
           error: err,
         );

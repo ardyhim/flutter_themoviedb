@@ -1,7 +1,7 @@
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/provider/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../provider/state.dart';
 
 class PageViewMoviesUpcoming extends ConsumerWidget {
   PageViewMoviesUpcoming({

@@ -1,12 +1,10 @@
 import 'dart:ui';
 
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/shared/placeholder/list_movie_popular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class listHorizontalMoviePopular extends ConsumerWidget {
-  listHorizontalMoviePopular({
+class ListHorizontalMoviePopular extends ConsumerWidget {
+  ListHorizontalMoviePopular({
     Key? key,
     required this.width,
     this.height = 250,

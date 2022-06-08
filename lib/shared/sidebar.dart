@@ -248,6 +248,7 @@ class Sidebar extends ConsumerWidget {
                             onPressed: () {
                               if (user.sessionId != "") {
                                 user.logout();
+                                router.goNamed("login");
                               } else {
                                 router.goNamed("login");
                               }

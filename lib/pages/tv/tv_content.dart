@@ -235,11 +235,11 @@ class TvView extends ConsumerWidget {
                             ref.read(tvListProvider.notifier).addTv(result);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "PAGINATION",
                         ),
                       )
-                    : Text("NO MORE"),
+                    : const Text("NO MORE"),
               ),
             ),
           ],
@@ -249,7 +249,7 @@ class TvView extends ConsumerWidget {
         return Container();
       },
       loading: () {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

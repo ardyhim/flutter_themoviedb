@@ -1,18 +1,16 @@
-import 'package:contoh/provider/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
 
 import '../../provider/api.dart';
-import '../../shared/drawer_button.dart';
+import '../../provider/state.dart';
 import '../../shared/text_button.dart';
 
 class LoginPage extends ConsumerWidget {
   LoginPage({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _username = TextEditingController(text: "");
-  TextEditingController _password = TextEditingController(text: "");
+  final TextEditingController _username = TextEditingController(text: "");
+  final TextEditingController _password = TextEditingController(text: "");
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter.of(context);
@@ -210,7 +208,6 @@ class LoginPage extends ConsumerWidget {
                                             .state = false;
                                         router.goNamed("home");
                                       } catch (e) {
-                                        print(e);
                                         ref
                                             .read(isLoadingProvider.state)
                                             .state = false;

@@ -1,8 +1,7 @@
-import 'package:contoh/pages/movie/movie_content.dart';
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/shared/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../shared/sidebar.dart';
+import 'movie_content.dart';
 
 class MoviePage extends StatelessWidget {
   const MoviePage({Key? key}) : super(key: key);

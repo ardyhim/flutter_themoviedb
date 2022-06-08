@@ -95,7 +95,7 @@ class CustomTextButton extends StatelessWidget {
         ),
       ),
       child: Text(
-        "$text",
+        text,
         style: Theme.of(context).textTheme.button,
       ),
     );

@@ -91,16 +91,16 @@ final accountFutureProvider = FutureProvider(((ref) async {
   final account = ref.read(accountProvider.notifier);
   var box = Hive.box('setting');
   var session = box.get("sessionId");
-  if (session != null) {
+  if (session != null || session == "") {
+    user.sessionId = session;
     try {
-      var movie = await tmdb.v3.account
-          .getFavoriteMovies(user.sessionId, user.user.id!);
-      var tv = await tmdb.v3.account
-          .getFavoriteMovies(user.sessionId, user.user.id!);
-      var tvWatchList = await tmdb.v3.account
-          .getTvShowWatchList(user.sessionId, user.user.id!);
-      var movieWatchList = await tmdb.v3.account
-          .getMovieWatchList(user.sessionId, user.user.id!);
+      var movie =
+          await tmdb.v3.account.getFavoriteMovies(session, user.user.id!);
+      var tv = await tmdb.v3.account.getFavoriteMovies(session, user.user.id!);
+      var tvWatchList =
+          await tmdb.v3.account.getTvShowWatchList(session, user.user.id!);
+      var movieWatchList =
+          await tmdb.v3.account.getMovieWatchList(session, user.user.id!);
       ModelAccount data = ModelAccount(
         movie: movie["results"],
         tv: tv["results"],
@@ -108,9 +108,11 @@ final accountFutureProvider = FutureProvider(((ref) async {
         tvWatchList: tvWatchList["results"],
       );
       account.add(data);
+      var accountData = await tmdb.v3.account.getDetails(box.get("sessionId"));
+      user.sessionId = session;
+      user.setUser(ModelUser.fromJson(accountData as Map<String, dynamic>));
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   } else {

@@ -1,10 +1,10 @@
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/repository/movie_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../provider/api.dart';
 import '../../provider/state.dart';
+import '../../repository/repository.dart';
 
 class MoviesView extends ConsumerWidget {
   MoviesView({
@@ -86,7 +86,6 @@ class MoviesView extends ConsumerWidget {
                     ref.read(movieRepositoryProvider).keyword = value;
                     ref.read(movieTypeProvider.state).state = MovieType.search;
                     movieRepository.type = MovieType.search;
-                    // ref.refresh(movieProvider);
                     ref.refresh(movieListProvider);
                     movieRepository.page = movieRepository.page + 1;
                     var result = await movieRepository.fetchSearch();
@@ -241,11 +240,11 @@ class MoviesView extends ConsumerWidget {
                                 .addMovie(result);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "PAGINATION",
                         ),
                       )
-                    : Text("NO MORE"),
+                    : const Text("NO MORE"),
               ),
             ),
           ],
@@ -255,7 +254,7 @@ class MoviesView extends ConsumerWidget {
         return Container();
       },
       loading: () {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

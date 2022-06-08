@@ -16,21 +16,21 @@ class AccountPage extends ConsumerWidget {
     final accountFuture = ref.watch(accountFutureProvider);
     final account = ref.watch(accountProvider);
     return Scaffold(
-      body: accountFuture.when(
-        data: (data) => Row(
-          children: [
-            Sidebar(size: size),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, BoxConstraints constraints) {
-                  if (data) {
-                    return SizedBox(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      child: CustomScrollView(
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: Container(
+      body: Row(
+        children: [
+          Sidebar(size: size),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, BoxConstraints constraints) {
+                return accountFuture.when(
+                  data: (data) {
+                    if (data) {
+                      return SizedBox(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
                               child: Row(
                                 children: [
                                   Text(
@@ -46,24 +46,20 @@ class AccountPage extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
-                              width: constraints.maxWidth,
-                              height: 200,
-                              child: ListView.builder(
-                                itemCount: account!.movie.length,
-                                itemBuilder: ((context, index) {
-                                  return Container(
-                                    child: Text(
-                                        "${account.movie[index]["title"]}"),
-                                  );
-                                }),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                width: constraints.maxWidth,
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: account!.movie.length,
+                                  itemBuilder: ((context, index) {
+                                    return Text(
+                                        "${account.movie[index]["title"]}");
+                                  }),
+                                ),
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
+                            SliverToBoxAdapter(
                               child: Row(
                                 children: [
                                   Text(
@@ -79,23 +75,19 @@ class AccountPage extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
-                              width: constraints.maxWidth,
-                              height: 200,
-                              child: ListView.builder(
-                                itemCount: account.tv.length,
-                                itemBuilder: ((context, index) {
-                                  return Container(
-                                    child: Text("${account.tv[index]["name"]}"),
-                                  );
-                                }),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                width: constraints.maxWidth,
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: account.tv.length,
+                                  itemBuilder: ((context, index) {
+                                    return Text("${account.tv[index]["name"]}");
+                                  }),
+                                ),
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
+                            SliverToBoxAdapter(
                               child: Row(
                                 children: [
                                   Text(
@@ -111,24 +103,20 @@ class AccountPage extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
-                              width: constraints.maxWidth,
-                              height: 200,
-                              child: ListView.builder(
-                                itemCount: account.movieWatchList.length,
-                                itemBuilder: ((context, index) {
-                                  return Container(
-                                    child: Text(
-                                        "${account.movieWatchList[index]["title"]}"),
-                                  );
-                                }),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                width: constraints.maxWidth,
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: account.movieWatchList.length,
+                                  itemBuilder: ((context, index) {
+                                    return Text(
+                                        "${account.movieWatchList[index]["title"]}");
+                                  }),
+                                ),
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
+                            SliverToBoxAdapter(
                               child: Row(
                                 children: [
                                   Text(
@@ -144,53 +132,51 @@ class AccountPage extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Container(
-                              width: constraints.maxWidth,
-                              height: 200,
-                              child: ListView.builder(
-                                itemCount: account.tvWatchList.length,
-                                itemBuilder: ((context, index) {
-                                  return Container(
-                                    child: Text(
-                                        "${account.tvWatchList[index]["name"]}"),
-                                  );
-                                }),
+                            SliverToBoxAdapter(
+                              child: SizedBox(
+                                width: constraints.maxWidth,
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: account.tvWatchList.length,
+                                  itemBuilder: ((context, index) {
+                                    return Text(
+                                        "${account.tvWatchList[index]["name"]}");
+                                  }),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return Center(
-                      child: SizedBox(
-                        width: 300,
-                        height: 70,
-                        child: DrawerButton(
-                          active: true,
-                          text: 'SIGN IN',
-                          textAlignment: TextAlignment.center,
-                          icon: const Icon(Icons.login),
-                          onPressed: () {
-                            GoRouter.of(context).goNamed("login");
-                          },
+                          ],
                         ),
-                      ),
-                    );
-                  }
-                },
-              ),
+                      );
+                    } else {
+                      return Center(
+                        child: SizedBox(
+                          width: 300,
+                          height: 70,
+                          child: DrawerButton(
+                            active: true,
+                            text: 'SIGN IN',
+                            textAlignment: TextAlignment.center,
+                            icon: const Icon(Icons.login),
+                            onPressed: () {
+                              GoRouter.of(context).goNamed("login");
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  error: (err, stack) => Center(
+                    child: Text("$err data"),
+                  ),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
-        error: (err, stack) => Center(
-          child: Text("$err"),
-        ),
-        loading: () => Center(
-          child: CircularProgressIndicator(),
-        ),
+          ),
+        ],
       ),
     );
   }

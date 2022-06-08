@@ -23,7 +23,7 @@ class UserState extends StateNotifier<ModelUser?> {
     var sessionId = await tmdb.v3.auth.createSession(sessionLogin);
     var account = await tmdb.v3.account.getDetails(sessionId);
     var box = Hive.box('setting');
-    box.put("sessionId", sessionLogin);
+    box.put("sessionId", sessionId);
     sessionId = sessionId;
     user = ModelUser.fromJson(account as Map<String, dynamic>);
     state = user;
@@ -38,6 +38,8 @@ class UserState extends StateNotifier<ModelUser?> {
     sessionId = "";
     token = "";
     user = ModelUser();
+    var box = Hive.box('setting');
+    box.delete("sessionId");
     state = null;
   }
 }
