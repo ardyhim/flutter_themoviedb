@@ -58,17 +58,38 @@ final homeProvider = FutureProvider((ref) async {
   );
 });
 
-final detailProvider = FutureProvider.family<ModelDetail, int>((ref, id) async {
+final detailMovieProvider =
+    FutureProvider.family<ModelDetailMovie, int>((ref, id) async {
   final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
   final credit = await tmdb.v3.movies.getCredits(id);
   final movie = await tmdb.v3.movies.getDetails(id);
   final review = await tmdb.v3.movies.getReviews(id);
   final video = await tmdb.v3.movies.getVideos(id);
-  return ModelDetail(
+  return ModelDetailMovie(
     credit: credit,
     movie: movie,
     review: review,
     video: video,
+  );
+});
+
+final detailTvProvider =
+    FutureProvider.family<ModelDetailTv, int>((ref, id) async {
+  final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
+  final credit = await tmdb.v3.tv.getCredits(id);
+  final tv = await tmdb.v3.tv.getDetails(id);
+  final review = await tmdb.v3.tv.getReviews(id);
+  final video = await tmdb.v3.tv.getVideos("$id/videos");
+  List session = [];
+  for (var i = 1; i < tv["number_of_seasons"] + 1; i++) {
+    session.add(await tmdb.v3.tvSeasons.getDetails(id, i));
+  }
+  return ModelDetailTv(
+    credit: credit,
+    tv: tv,
+    review: review,
+    video: video,
+    session: session,
   );
 });
 

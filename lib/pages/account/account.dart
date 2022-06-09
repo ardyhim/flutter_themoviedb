@@ -214,7 +214,7 @@ class AccountPage extends ConsumerWidget {
                                         child: GestureDetector(
                                           onTap: () {
                                             router.goNamed(
-                                              "account_detail_movie",
+                                              "account_detail_tv",
                                               params: {
                                                 "id": account.tv[index]["id"]
                                                     .toString(),
@@ -487,7 +487,7 @@ class AccountPage extends ConsumerWidget {
                                         child: GestureDetector(
                                           onTap: () {
                                             router.goNamed(
-                                              "account_detail_movie",
+                                              "account_detail_tv",
                                               params: {
                                                 "id": account.tvWatchList[index]
                                                         ["id"]

@@ -7,13 +7,13 @@ import '../../utils/mapping.dart';
 import 'item_people.dart';
 import 'item_review.dart';
 
-class DetailMoviePage extends ConsumerWidget {
-  DetailMoviePage({Key? key, required this.id}) : super(key: key);
+class DetailTvPage extends ConsumerWidget {
+  DetailTvPage({Key? key, required this.id}) : super(key: key);
   late int id;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter.of(context);
-    final detailWatch = ref.watch(detailMovieProvider(id));
+    final detailWatch = ref.watch(detailTvProvider(id));
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, BoxConstraints constraints) {
@@ -30,7 +30,7 @@ class DetailMoviePage extends ConsumerWidget {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          "https://image.tmdb.org/t/p/original${data.movie["backdrop_path"]}",
+                          "https://image.tmdb.org/t/p/original${data.tv["backdrop_path"]}",
                         ),
                       ),
                     ),
@@ -87,7 +87,7 @@ class DetailMoviePage extends ConsumerWidget {
                           padding: EdgeInsets.only(
                               right: constraints.maxWidth / 2.5),
                           child: Text(
-                            "${data.movie["title"]}",
+                            "${data.tv["name"]}",
                             style: Theme.of(context).textTheme.displayLarge,
                           ),
                         ),
@@ -103,7 +103,7 @@ class DetailMoviePage extends ConsumerWidget {
                             vertical: 10,
                           ),
                           child: Text(
-                            "${data.movie["overview"]}",
+                            "${data.tv["overview"]}",
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
@@ -120,7 +120,7 @@ class DetailMoviePage extends ConsumerWidget {
                           ),
                           child: Wrap(
                             children: [
-                              ...data.movie["genres"].map(
+                              ...data.tv["genres"].map(
                                 (genre) => Container(
                                   margin: const EdgeInsets.only(right: 5),
                                   child: Chip(
@@ -135,16 +135,6 @@ class DetailMoviePage extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          // child: ListView.builder(
-                          //   itemCount: data.movie["genres"].length,
-                          //   scrollDirection: Axis.horizontal,
-                          //   shrinkWrap: true,
-                          //   itemBuilder: ((context, index) => Chip(
-                          //         label: Text(
-                          //           "${data.movie["genres"][index]["name"]}",
-                          //         ),
-                          //       )),
-                          // ),
                         ),
                       ),
                       SliverToBoxAdapter(
@@ -189,7 +179,7 @@ class DetailMoviePage extends ConsumerWidget {
                                   bottom: 10,
                                 ),
                                 child: Text(
-                                  "IMDb: ${data.movie["vote_average"]}",
+                                  "IMDb: ${data.tv["vote_average"]}",
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
@@ -199,7 +189,7 @@ class DetailMoviePage extends ConsumerWidget {
                                   vertical: 20,
                                 ),
                                 child: Text(
-                                  "${data.movie["release_date"]}",
+                                  "${data.tv["first_air_date"]}",
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
@@ -327,6 +317,42 @@ class DetailMoviePage extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, int i) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.background,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant,
+                                  ),
+                                ),
+                              ),
+                              child: ExpansionTile(
+                                title: Text("${data.session[i]["name"]}"),
+                                children: [
+                                  ...data.session[i]["episodes"].map(
+                                    (e) => ListTile(
+                                      leading: Container(
+                                        width: 40,
+                                        child: Center(
+                                          child: Text("${e["episode_number"]}"),
+                                        ),
+                                      ),
+                                      title: Text("${e["name"]}"),
+                                      subtitle: Text("${e["overview"]}"),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          childCount: data.session.length,
+                        ),
+                      ),
                       SliverToBoxAdapter(
                         child: Container(
                           width: constraints.maxWidth,
@@ -372,6 +398,7 @@ class DetailMoviePage extends ConsumerWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.symmetric(

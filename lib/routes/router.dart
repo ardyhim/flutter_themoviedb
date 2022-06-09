@@ -1,11 +1,12 @@
-import 'package:contoh/pages/account/account.dart';
 import 'package:go_router/go_router.dart';
 
+import '../pages/account/account.dart';
 import '../pages/home/home.dart';
 import '../pages/login/login.dart';
 import '../pages/movie/movie.dart';
 import '../pages/movie_detail/detail.dart';
 import '../pages/tv/tv.dart';
+import '../pages/tv_detail/detail.dart';
 
 final router = [
   GoRoute(
@@ -24,10 +25,16 @@ final router = [
     builder: (context, state) => const AccountPage(),
     routes: [
       GoRoute(
-        path: ':id',
+        path: 'tv/:id',
+        name: "account_detail_tv",
+        builder: (context, state) =>
+            DetailTvPage(id: int.parse(state.params['id']!)),
+      ),
+      GoRoute(
+        path: 'movie/:id',
         name: "account_detail_movie",
         builder: (context, state) =>
-            DetailPage(id: int.parse(state.params['id']!)),
+            DetailMoviePage(id: int.parse(state.params['id']!)),
       ),
     ],
   ),
@@ -40,7 +47,7 @@ final router = [
         path: ':id',
         name: "detail_movie",
         builder: (context, state) =>
-            DetailPage(id: int.parse(state.params['id']!)),
+            DetailMoviePage(id: int.parse(state.params['id']!)),
       ),
     ],
   ),
@@ -53,7 +60,7 @@ final router = [
         path: ':id',
         name: "detail_tv",
         builder: (context, state) =>
-            DetailPage(id: int.parse(state.params['id']!)),
+            DetailTvPage(id: int.parse(state.params['id']!)),
       ),
     ],
   ),
