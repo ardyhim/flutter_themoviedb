@@ -1,3 +1,4 @@
+import 'package:contoh/shared/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -135,16 +136,6 @@ class DetailMoviePage extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          // child: ListView.builder(
-                          //   itemCount: data.movie["genres"].length,
-                          //   scrollDirection: Axis.horizontal,
-                          //   shrinkWrap: true,
-                          //   itemBuilder: ((context, index) => Chip(
-                          //         label: Text(
-                          //           "${data.movie["genres"][index]["name"]}",
-                          //         ),
-                          //       )),
-                          // ),
                         ),
                       ),
                       SliverToBoxAdapter(
@@ -202,6 +193,11 @@ class DetailMoviePage extends ConsumerWidget {
                                   "${data.movie["release_date"]}",
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
+                              ),
+                              CustomIconButton(
+                                icon: const Icon(Icons.favorite),
+                                active: true,
+                                onPressed: () {},
                               ),
                             ],
                           ),

@@ -28,7 +28,7 @@ class PageViewMoviesUpcoming extends ConsumerWidget {
         itemCount: 5,
         onPageChanged: (int currentPage) {
           ref.read(homeBackgroundImageProvider.state).state =
-              "https://image.tmdb.org/t/p/w1280${data["results"][currentPage]["poster_path"]}";
+              "https://image.tmdb.org/t/p/w1280${data["results"][currentPage]["backdrop_path"]}";
         },
         itemBuilder: ((context, int i) {
           return Container(

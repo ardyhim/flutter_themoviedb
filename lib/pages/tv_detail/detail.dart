@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../provider/api.dart';
+import '../../shared/icon_button.dart';
 import '../../utils/mapping.dart';
 import 'item_people.dart';
 import 'item_review.dart';
@@ -192,6 +193,11 @@ class DetailTvPage extends ConsumerWidget {
                                   "${data.tv["first_air_date"]}",
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
+                              ),
+                              CustomIconButton(
+                                icon: const Icon(Icons.favorite),
+                                active: true,
+                                onPressed: () {},
                               ),
                             ],
                           ),

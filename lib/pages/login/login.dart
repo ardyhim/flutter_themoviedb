@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -146,13 +147,23 @@ class LoginPage extends ConsumerWidget {
                                   final user = ref.read(userProvider.notifier);
                                   try {
                                     await user.login(
-                                        tmdb: api.tmdb,
-                                        username: _username.text,
-                                        password: _password.text);
+                                      tmdb: api.tmdb,
+                                      username: _username.text,
+                                      password: _password.text,
+                                    );
                                     ref.refresh(accountFutureProvider);
                                     ref.read(isLoadingProvider.state).state =
                                         false;
                                     router.goNamed("home");
+                                  } on DioError catch (e) {
+                                    ref.read(isLoadingProvider.state).state =
+                                        false;
+                                    SnackBar snackBar = SnackBar(
+                                      content: Text(
+                                          '${e.response!.data["status_message"]}'),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   } catch (e) {
                                     ref.read(isLoadingProvider.state).state =
                                         false;
@@ -199,14 +210,25 @@ class LoginPage extends ConsumerWidget {
                                           ref.read(userProvider.notifier);
                                       try {
                                         await user.login(
-                                            tmdb: api.tmdb,
-                                            username: _username.text,
-                                            password: _password.text);
+                                          tmdb: api.tmdb,
+                                          username: _username.text,
+                                          password: _password.text,
+                                        );
                                         ref.refresh(accountFutureProvider);
                                         ref
                                             .read(isLoadingProvider.state)
                                             .state = false;
                                         router.goNamed("home");
+                                      } on DioError catch (e) {
+                                        ref
+                                            .read(isLoadingProvider.state)
+                                            .state = false;
+                                        SnackBar snackBar = SnackBar(
+                                          content: Text(
+                                              '${e.response!.data["status_message"]}'),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       } catch (e) {
                                         ref
                                             .read(isLoadingProvider.state)
@@ -214,7 +236,6 @@ class LoginPage extends ConsumerWidget {
                                       }
                                     },
                                     text: "LOGIN",
-                                    // icon: const Icon(Icons.login_rounded),
                                   );
                                 }),
                               ),

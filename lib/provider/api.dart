@@ -110,8 +110,7 @@ final accountFutureProvider = FutureProvider(((ref) async {
   final tmdb = ref.read(tmdbRepositoryProvider).tmdb;
   final user = ref.read(userProvider.notifier);
   final account = ref.read(accountProvider.notifier);
-  var box = Hive.box('setting');
-  var session = box.get("sessionId");
+  var session = await user.getSession();
   if (session != null || session == "") {
     user.sessionId = session;
     try {
@@ -129,7 +128,8 @@ final accountFutureProvider = FutureProvider(((ref) async {
         tvWatchList: tvWatchList["results"],
       );
       account.add(data);
-      var accountData = await tmdb.v3.account.getDetails(box.get("sessionId"));
+      if (user.user == null) print("");
+      var accountData = await tmdb.v3.account.getDetails(session);
       user.sessionId = session;
       user.setUser(ModelUser.fromJson(accountData as Map<String, dynamic>));
       return true;

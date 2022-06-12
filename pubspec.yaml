@@ -38,6 +38,7 @@ dependencies:
   tmdb_api: ^2.1.2
   shimmer: ^2.0.0
   hive: ^2.2.1
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:

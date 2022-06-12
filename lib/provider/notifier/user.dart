@@ -34,6 +34,13 @@ class UserState extends StateNotifier<ModelUser?> {
     state = data;
   }
 
+  getSession() async {
+    var box = Hive.box('setting');
+    var session = box.get("sessionId");
+    sessionId = session as String;
+    return session;
+  }
+
   Future<void> logout() async {
     sessionId = "";
     token = "";
