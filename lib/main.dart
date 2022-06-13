@@ -1,22 +1,28 @@
-import 'package:contoh/routes/router.dart';
-import 'package:contoh/shared/color_schemes.dart';
-import 'package:contoh/shared/scroll_behavior.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'provider/api.dart';
+import 'provider/state.dart';
+import 'shared/color_schemes.dart';
+import 'shared/error.dart';
+import 'shared/scroll_behavior.dart';
+import 'shared/splash.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp.router(
-        title: 'Flutter Demo',
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    final hive = ref.watch(hiveProvider);
+    return hive.when(
+      data: (data) => MaterialApp.router(
+        title: 'Flutter Movies',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: darkColorScheme,
@@ -26,6 +32,13 @@ class MyApp extends StatelessWidget {
         routerDelegate: router.routerDelegate,
         scrollBehavior: AppScrollBehavior(),
       ),
+      error: (err, stack) {
+        // print(err);
+        return CustomError(
+          error: err,
+        );
+      },
+      loading: () => const Splash(),
     );
   }
 }

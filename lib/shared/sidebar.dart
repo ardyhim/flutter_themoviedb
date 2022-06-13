@@ -1,10 +1,10 @@
-import 'package:contoh/provider/state.dart';
-import 'package:contoh/routes/router.dart';
-import 'package:contoh/shared/drawer_button.dart';
-import 'package:contoh/shared/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../provider/state.dart';
+import 'drawer_button.dart';
+import 'icon_button.dart';
 
 class Sidebar extends ConsumerWidget {
   const Sidebar({
@@ -20,12 +20,12 @@ class Sidebar extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         bool isSidebar = ref.watch(sidebarProvider.state).state;
+        final user = ref.read(userProvider.notifier);
         return SizedBox(
           width: isSidebar ? 300 : 80,
           height: size.height,
           child: Container(
             color: Theme.of(context).colorScheme.surface,
-            // padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
                 Expanded(
@@ -58,46 +58,6 @@ class Sidebar extends ConsumerWidget {
                                         router.location == "/" ? true : false,
                                     icon: const Icon(Icons.home),
                                     onPressed: () => router.goNamed("home"),
-                                  ),
-                          ),
-                        ),
-                        Tooltip(
-                          verticalOffset: 40,
-                          message: "Favorite",
-                          child: Container(
-                            height: 50,
-                            margin: const EdgeInsets.only(top: 20),
-                            child: isSidebar
-                                ? DrawerButton(
-                                    active: router.location == "/favorite"
-                                        ? true
-                                        : false,
-                                    onPressed: () {
-                                      router.goNamed(
-                                        "detail_movie",
-                                        params: {
-                                          "id": "1",
-                                        },
-                                      );
-                                    },
-                                    text: "Favorite",
-                                    icon: const Icon(
-                                      Icons.favorite,
-                                    ),
-                                  )
-                                : CustomIconButton(
-                                    active: router.location == "/favorite"
-                                        ? true
-                                        : false,
-                                    icon: const Icon(Icons.favorite),
-                                    onPressed: () {
-                                      router.goNamed(
-                                        "detail_movie",
-                                        params: {
-                                          "id": "1",
-                                        },
-                                      );
-                                    },
                                   ),
                           ),
                         ),
@@ -157,29 +117,63 @@ class Sidebar extends ConsumerWidget {
                                   ),
                           ),
                         ),
+                        // Tooltip(
+                        //   verticalOffset: 40,
+                        //   message: "Categories",
+                        //   child: Container(
+                        //     height: 50,
+                        //     margin: const EdgeInsets.only(top: 20),
+                        //     child: isSidebar
+                        //         ? DrawerButton(
+                        //             active: router.location == "/categories"
+                        //                 ? true
+                        //                 : false,
+                        //             onPressed: () {},
+                        //             text: "Genres",
+                        //             icon: const Icon(
+                        //               Icons.category,
+                        //             ),
+                        //           )
+                        //         : CustomIconButton(
+                        //             active: router.location == "/categories"
+                        //                 ? true
+                        //                 : false,
+                        //             icon: const Icon(Icons.category),
+                        //             onPressed: () {},
+                        //           ),
+                        //   ),
+                        // ),
                         Tooltip(
                           verticalOffset: 40,
-                          message: "Categories",
+                          message: "Account",
                           child: Container(
                             height: 50,
                             margin: const EdgeInsets.only(top: 20),
                             child: isSidebar
                                 ? DrawerButton(
-                                    active: router.location == "/categories"
+                                    active: router.location == "/account"
                                         ? true
                                         : false,
-                                    onPressed: () {},
-                                    text: "Genres",
+                                    onPressed: () {
+                                      router.goNamed(
+                                        "account",
+                                      );
+                                    },
+                                    text: "Account",
                                     icon: const Icon(
-                                      Icons.category,
+                                      Icons.person,
                                     ),
                                   )
                                 : CustomIconButton(
-                                    active: router.location == "/categories"
+                                    active: router.location == "/account"
                                         ? true
                                         : false,
-                                    icon: const Icon(Icons.category),
-                                    onPressed: () {},
+                                    icon: const Icon(Icons.person),
+                                    onPressed: () {
+                                      router.goNamed(
+                                        "account",
+                                      );
+                                    },
                                   ),
                           ),
                         ),
@@ -219,7 +213,7 @@ class Sidebar extends ConsumerWidget {
                 ),
                 Tooltip(
                   verticalOffset: 40,
-                  message: "Sign Out",
+                  message: user.sessionId != "" ? "Sign Out" : "Sign In",
                   child: Container(
                     width: isSidebar ? 300 : 80,
                     height: 50,
@@ -233,14 +227,31 @@ class Sidebar extends ConsumerWidget {
                     child: isSidebar
                         ? DrawerButton(
                             active: router.location == "/login" ? true : false,
-                            onPressed: () => router.goNamed("login"),
-                            text: "Sign Out",
-                            icon: const Icon(Icons.login_rounded),
+                            onPressed: () {
+                              if (user.sessionId != "") {
+                                user.logout();
+                              } else {
+                                router.goNamed("login");
+                              }
+                            },
+                            text: user.sessionId != "" ? "Sign Out" : "Sign In",
+                            icon: user.sessionId != ""
+                                ? const Icon(Icons.logout_rounded)
+                                : const Icon(Icons.login_rounded),
                           )
                         : CustomIconButton(
                             active: router.location == "/login" ? true : false,
-                            icon: const Icon(Icons.login_rounded),
-                            onPressed: () => router.goNamed("login"),
+                            icon: user.sessionId != ""
+                                ? const Icon(Icons.logout_rounded)
+                                : const Icon(Icons.login_rounded),
+                            onPressed: () {
+                              if (user.sessionId != "") {
+                                user.logout();
+                                router.goNamed("login");
+                              } else {
+                                router.goNamed("login");
+                              }
+                            },
                           ),
                   ),
                 ),

@@ -1,9 +1,10 @@
-import 'package:contoh/pages/home/list_horizontal_movie_popular.dart';
-import 'package:contoh/pages/home/page_view_movie_popular.dart';
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/shared/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../provider/api.dart';
+import '../../shared/sidebar.dart';
+import 'list_horizontal_movie_popular.dart';
+import 'page_view_movie_popular.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class HomePage extends ConsumerWidget {
                           ),
                           Positioned(
                             bottom: 0,
-                            child: listHorizontalMoviePopular(
+                            child: ListHorizontalMoviePopular(
                               width: constraints.maxWidth,
                               data: data.popular,
                             ),
@@ -61,9 +62,7 @@ class HomePage extends ConsumerWidget {
                     loading: () => const Center(
                       child: CircularProgressIndicator(),
                     ),
-                    error: (err, stack) => Container(
-                      child: Text("ERROR"),
-                    ),
+                    error: (err, stack) => const Text("ERROR"),
                   ),
                 );
               },

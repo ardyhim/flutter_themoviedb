@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../model/model.dart';
 import '../repository/repository.dart';
 import 'notifier/notifier.dart';
 
@@ -26,6 +28,13 @@ final tvRepositoryProvider = Provider(
     tmdb: TMDBRepository(read: ref.read).tmdb,
   ),
 );
+
+final accountRepositoryProvider = Provider(
+  (ref) => AccountRepository(
+    read: ref.read,
+    tmdb: TMDBRepository(read: ref.read).tmdb,
+  ),
+);
 final movieTypeProvider =
     StateProvider<MovieType>(((ref) => MovieType.trending));
 final tvTypeProvider = StateProvider<TvType>(((ref) => TvType.trending));
@@ -43,3 +52,29 @@ final tvListProvider =
 final homeBackgroundImageProvider = StateProvider(((ref) {
   return "unknown";
 }));
+
+final userProvider = StateNotifierProvider<UserState, ModelUser?>((ref) {
+  return UserState();
+});
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final router = RouterNotifier(ref);
+
+  return GoRouter(
+    debugLogDiagnostics: true,
+    refreshListenable: router,
+    redirect: router.redirectLogic,
+    routes: router.routes,
+  );
+});
+
+final accountProvider =
+    StateNotifierProvider<AccountNotifier, ModelAccount?>((ref) {
+  return AccountNotifier();
+});
+
+final validationLoginState = StateProvider(((ref) => false));
+
+final isLoadingState = StateProvider(((ref) => false));
+
+final isFavoriteState = StateProvider(((ref) => false));

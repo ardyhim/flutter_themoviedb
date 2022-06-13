@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/shared/placeholder/list_movie_popular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class listHorizontalMoviePopular extends ConsumerWidget {
-  listHorizontalMoviePopular({
+class ListHorizontalMoviePopular extends ConsumerWidget {
+  ListHorizontalMoviePopular({
     Key? key,
     required this.width,
     this.height = 250,
@@ -49,7 +48,7 @@ class listHorizontalMoviePopular extends ConsumerWidget {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        "https://image.tmdb.org/t/p/w500${data["results"][i]["poster_path"]}",
+                        "https://image.tmdb.org/t/p/w500${data["results"][i]["backdrop_path"]}",
                       ),
                     ),
                   ),
@@ -79,7 +78,14 @@ class listHorizontalMoviePopular extends ConsumerWidget {
                                   .withOpacity(0.3),
                               padding: const EdgeInsets.all(20),
                               shape: const CircleBorder(),
-                              onPressed: () => {},
+                              onPressed: () => {
+                                GoRouter.of(context).goNamed(
+                                  "detail_movie",
+                                  params: {
+                                    "id": data["results"][i]["id"].toString(),
+                                  },
+                                )
+                              },
                               child: Icon(
                                 Icons.play_arrow,
                                 size: 50,

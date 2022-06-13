@@ -1,7 +1,7 @@
-import 'package:contoh/provider/api.dart';
-import 'package:contoh/provider/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../provider/state.dart';
 
 class PageViewMoviesUpcoming extends ConsumerWidget {
   PageViewMoviesUpcoming({
@@ -28,7 +28,7 @@ class PageViewMoviesUpcoming extends ConsumerWidget {
         itemCount: 5,
         onPageChanged: (int currentPage) {
           ref.read(homeBackgroundImageProvider.state).state =
-              "https://image.tmdb.org/t/p/w1280${data["results"][currentPage]["poster_path"]}";
+              "https://image.tmdb.org/t/p/w1280${data["results"][currentPage]["backdrop_path"]}";
         },
         itemBuilder: ((context, int i) {
           return Container(
