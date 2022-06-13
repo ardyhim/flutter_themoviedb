@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../provider/api.dart';
 import '../../provider/state.dart';
@@ -81,11 +82,9 @@ class LoginPage extends ConsumerWidget {
                         key: _formKey,
                         onChanged: () {
                           if (_formKey.currentState!.validate()) {
-                            ref.read(validationLoginProvider.state).state =
-                                true;
+                            ref.read(validationLoginState.state).state = true;
                           } else {
-                            ref.read(validationLoginProvider.state).state =
-                                false;
+                            ref.read(validationLoginState.state).state = false;
                           }
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -141,8 +140,7 @@ class LoginPage extends ConsumerWidget {
                                   return null;
                                 },
                                 onFieldSubmitted: (String value) async {
-                                  ref.read(isLoadingProvider.state).state =
-                                      true;
+                                  ref.read(isLoadingState.state).state = true;
                                   var api = ref.read(tmdbRepositoryProvider);
                                   final user = ref.read(userProvider.notifier);
                                   try {
@@ -152,11 +150,11 @@ class LoginPage extends ConsumerWidget {
                                       password: _password.text,
                                     );
                                     ref.refresh(accountFutureProvider);
-                                    ref.read(isLoadingProvider.state).state =
+                                    ref.read(isLoadingState.state).state =
                                         false;
                                     router.goNamed("home");
                                   } on DioError catch (e) {
-                                    ref.read(isLoadingProvider.state).state =
+                                    ref.read(isLoadingState.state).state =
                                         false;
                                     SnackBar snackBar = SnackBar(
                                       content: Text(
@@ -165,7 +163,7 @@ class LoginPage extends ConsumerWidget {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   } catch (e) {
-                                    ref.read(isLoadingProvider.state).state =
+                                    ref.read(isLoadingState.state).state =
                                         false;
                                   }
                                 },
@@ -197,12 +195,12 @@ class LoginPage extends ConsumerWidget {
                                 child: Consumer(
                                     builder: (context, WidgetRef validator, _) {
                                   bool validation = ref
-                                      .watch(validationLoginProvider.state)
+                                      .watch(validationLoginState.state)
                                       .state;
                                   return CustomTextButton(
                                     active: validation,
                                     onPressed: () async {
-                                      ref.read(isLoadingProvider.state).state =
+                                      ref.read(isLoadingState.state).state =
                                           true;
                                       var api =
                                           ref.read(tmdbRepositoryProvider);
@@ -215,14 +213,12 @@ class LoginPage extends ConsumerWidget {
                                           password: _password.text,
                                         );
                                         ref.refresh(accountFutureProvider);
-                                        ref
-                                            .read(isLoadingProvider.state)
-                                            .state = false;
+                                        ref.read(isLoadingState.state).state =
+                                            false;
                                         router.goNamed("home");
                                       } on DioError catch (e) {
-                                        ref
-                                            .read(isLoadingProvider.state)
-                                            .state = false;
+                                        ref.read(isLoadingState.state).state =
+                                            false;
                                         SnackBar snackBar = SnackBar(
                                           content: Text(
                                               '${e.response!.data["status_message"]}'),
@@ -230,14 +226,35 @@ class LoginPage extends ConsumerWidget {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                       } catch (e) {
-                                        ref
-                                            .read(isLoadingProvider.state)
-                                            .state = false;
+                                        ref.read(isLoadingState.state).state =
+                                            false;
                                       }
                                     },
                                     text: "LOGIN",
                                   );
                                 }),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              height: 70,
+                              child: SizedBox.expand(
+                                child: CustomTextButton(
+                                  active: true,
+                                  onPressed: () async {
+                                    const url =
+                                        'https://www.themoviedb.org/signup';
+                                    await launchUrl(
+                                      Uri.parse(url),
+                                      mode: LaunchMode
+                                          .externalNonBrowserApplication,
+                                    );
+                                  },
+                                  text: "REGISTER",
+                                ),
                               ),
                             ),
                           ],
@@ -250,7 +267,7 @@ class LoginPage extends ConsumerWidget {
             ),
             Consumer(
               builder: ((context, ref, child) {
-                final isLoading = ref.watch(isLoadingProvider.state).state;
+                final isLoading = ref.watch(isLoadingState.state).state;
                 return isLoading
                     ? Container(
                         width: constraints.maxWidth,

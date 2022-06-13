@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 import '../../provider/api.dart';
+import '../../provider/state.dart';
 import '../../shared/icon_button.dart';
 import '../../utils/mapping.dart';
 import 'item_people.dart';
@@ -24,6 +27,12 @@ class DetailTvPage extends ConsumerWidget {
             ),
             error: (err, stack) => const Text("ERROR"),
             data: (data) {
+              Future.delayed(
+                const Duration(milliseconds: 500),
+                (() => ref.read(isFavoriteState.state).state =
+                    data.state["favorite"]),
+              );
+
               return Stack(
                 children: [
                   Container(
@@ -151,10 +160,7 @@ class DetailTvPage extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               TextButton(
-                                onPressed: () {
-                                  var cast =
-                                      MappingMovie().cast(data.credit["cast"]);
-                                },
+                                onPressed: () {},
                                 style: ButtonStyle(
                                   padding: MaterialStateProperty.all(
                                     const EdgeInsets.symmetric(
@@ -194,10 +200,40 @@ class DetailTvPage extends ConsumerWidget {
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
-                              CustomIconButton(
-                                icon: const Icon(Icons.favorite),
-                                active: true,
-                                onPressed: () {},
+                              Consumer(
+                                builder: ((context, ref, child) {
+                                  final isFavorite =
+                                      ref.watch(isFavoriteState.state).state;
+                                  return CustomIconButton(
+                                    icon: const Icon(Icons.favorite),
+                                    active: isFavorite,
+                                    onPressed: () async {
+                                      final user =
+                                          ref.read(userProvider.notifier);
+                                      final accountProvider =
+                                          ref.read(accountRepositoryProvider);
+                                      try {
+                                        await accountProvider.markAsFavorite(
+                                          user.sessionId,
+                                          user.user.id!,
+                                          id,
+                                          MediaType.tv,
+                                          !isFavorite,
+                                        );
+                                        ref.read(isFavoriteState.state).state =
+                                            !isFavorite;
+                                      } on DioError catch (e) {
+                                        SnackBar snackBar = SnackBar(
+                                          content: Text(
+                                            '${e.response!.data["status_message"]}',
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    },
+                                  );
+                                }),
                               ),
                             ],
                           ),
@@ -342,7 +378,7 @@ class DetailTvPage extends ConsumerWidget {
                                 children: [
                                   ...data.session[i]["episodes"].map(
                                     (e) => ListTile(
-                                      leading: Container(
+                                      leading: SizedBox(
                                         width: 40,
                                         child: Center(
                                           child: Text("${e["episode_number"]}"),

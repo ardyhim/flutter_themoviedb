@@ -26,7 +26,6 @@ class Sidebar extends ConsumerWidget {
           height: size.height,
           child: Container(
             color: Theme.of(context).colorScheme.surface,
-            // padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
                 Expanded(
@@ -118,32 +117,32 @@ class Sidebar extends ConsumerWidget {
                                   ),
                           ),
                         ),
-                        Tooltip(
-                          verticalOffset: 40,
-                          message: "Categories",
-                          child: Container(
-                            height: 50,
-                            margin: const EdgeInsets.only(top: 20),
-                            child: isSidebar
-                                ? DrawerButton(
-                                    active: router.location == "/categories"
-                                        ? true
-                                        : false,
-                                    onPressed: () {},
-                                    text: "Genres",
-                                    icon: const Icon(
-                                      Icons.category,
-                                    ),
-                                  )
-                                : CustomIconButton(
-                                    active: router.location == "/categories"
-                                        ? true
-                                        : false,
-                                    icon: const Icon(Icons.category),
-                                    onPressed: () {},
-                                  ),
-                          ),
-                        ),
+                        // Tooltip(
+                        //   verticalOffset: 40,
+                        //   message: "Categories",
+                        //   child: Container(
+                        //     height: 50,
+                        //     margin: const EdgeInsets.only(top: 20),
+                        //     child: isSidebar
+                        //         ? DrawerButton(
+                        //             active: router.location == "/categories"
+                        //                 ? true
+                        //                 : false,
+                        //             onPressed: () {},
+                        //             text: "Genres",
+                        //             icon: const Icon(
+                        //               Icons.category,
+                        //             ),
+                        //           )
+                        //         : CustomIconButton(
+                        //             active: router.location == "/categories"
+                        //                 ? true
+                        //                 : false,
+                        //             icon: const Icon(Icons.category),
+                        //             onPressed: () {},
+                        //           ),
+                        //   ),
+                        // ),
                         Tooltip(
                           verticalOffset: 40,
                           message: "Account",

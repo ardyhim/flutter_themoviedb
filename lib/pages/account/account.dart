@@ -47,11 +47,11 @@ class AccountPage extends ConsumerWidget {
                                           .titleLarge,
                                     ),
                                     const Spacer(),
-                                    Text(
-                                      "See More",
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
+                                    // Text(
+                                    //   "See More",
+                                    //   style:
+                                    //       Theme.of(context).textTheme.overline,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -183,11 +183,11 @@ class AccountPage extends ConsumerWidget {
                                           .titleLarge,
                                     ),
                                     const Spacer(),
-                                    Text(
-                                      "See More",
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
+                                    // Text(
+                                    //   "See More",
+                                    //   style:
+                                    //       Theme.of(context).textTheme.overline,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -319,11 +319,11 @@ class AccountPage extends ConsumerWidget {
                                           .titleLarge,
                                     ),
                                     const Spacer(),
-                                    Text(
-                                      "See More",
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
+                                    // Text(
+                                    //   "See More",
+                                    //   style:
+                                    //       Theme.of(context).textTheme.overline,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -456,11 +456,11 @@ class AccountPage extends ConsumerWidget {
                                           .titleLarge,
                                     ),
                                     const Spacer(),
-                                    Text(
-                                      "See More",
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
+                                    // Text(
+                                    //   "See More",
+                                    //   style:
+                                    //       Theme.of(context).textTheme.overline,
+                                    // ),
                                   ],
                                 ),
                               ),

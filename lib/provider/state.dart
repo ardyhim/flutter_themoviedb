@@ -28,6 +28,13 @@ final tvRepositoryProvider = Provider(
     tmdb: TMDBRepository(read: ref.read).tmdb,
   ),
 );
+
+final accountRepositoryProvider = Provider(
+  (ref) => AccountRepository(
+    read: ref.read,
+    tmdb: TMDBRepository(read: ref.read).tmdb,
+  ),
+);
 final movieTypeProvider =
     StateProvider<MovieType>(((ref) => MovieType.trending));
 final tvTypeProvider = StateProvider<TvType>(((ref) => TvType.trending));
@@ -66,5 +73,8 @@ final accountProvider =
   return AccountNotifier();
 });
 
-final validationLoginProvider = StateProvider(((ref) => false));
-final isLoadingProvider = StateProvider(((ref) => false));
+final validationLoginState = StateProvider(((ref) => false));
+
+final isLoadingState = StateProvider(((ref) => false));
+
+final isFavoriteState = StateProvider(((ref) => false));
