@@ -1,5 +1,6 @@
-import 'package:contoh/model/account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../model/account.dart';
 
 class AccountNotifier extends StateNotifier<ModelAccount?> {
   AccountNotifier() : super(null);

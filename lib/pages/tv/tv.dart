@@ -1,6 +1,6 @@
-import 'package:contoh/shared/sidebar.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/sidebar.dart';
 import 'tv_content.dart';
 
 class TvPage extends StatelessWidget {

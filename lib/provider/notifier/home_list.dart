@@ -1,5 +1,6 @@
-import 'package:contoh/model/home.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../model/home.dart';
 
 class HomeListNotifier extends StateNotifier<List<ModelHome>> {
   HomeListNotifier() : super([]);
