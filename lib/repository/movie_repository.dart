@@ -20,20 +20,21 @@ class MovieRepository {
   int trendingPage = 1;
   int searchPage = 1;
   String keyword = "";
-  bool isMore = true;
+  bool isMoreTrending = true;
+  bool isMoreSearch = true;
   bool isLoading = false;
   late Map trending;
 
   Future<List> fetchPopular() async {
     isLoading = true;
-    if (!isMore) return List.empty();
+    if (!isMoreTrending) return List.empty();
     if (trendingPage == 1) {
       Map result = await tmdb.v3.trending.getTrending(
         mediaType: MediaType.movie,
         timeWindow: TimeWindow.day,
         page: trendingPage,
       );
-      if (result["results"].length <= 19) isMore = false;
+      if (result["results"].length <= 19) isMoreTrending = false;
       trending = result;
       isLoading = false;
       return trending["results"];
@@ -43,7 +44,7 @@ class MovieRepository {
         timeWindow: TimeWindow.day,
         page: trendingPage,
       );
-      if (result["results"].length <= 19) isMore = false;
+      if (result["results"].length <= 19) isMoreTrending = false;
       trending["results"].addAll(result["results"]);
       isLoading = false;
       final movieList = read(movieListProvider.notifier);
@@ -54,15 +55,15 @@ class MovieRepository {
 
   Future<List> fetchSearch() async {
     isLoading = true;
-    if (!isMore) return [];
+    if (!isMoreSearch) return [];
     if (searchPage == 1) {
       Map result = await tmdb.v3.search.queryMovies(keyword, page: searchPage);
-      if (result["results"].length <= 19) isMore = false;
+      if (result["results"].length <= 19) isMoreSearch = false;
       isLoading = false;
       return result["results"];
     } else {
       Map result = await tmdb.v3.search.queryMovies(keyword, page: searchPage);
-      if (result["results"].length <= 19) isMore = false;
+      if (result["results"].length <= 19) isMoreSearch = false;
       isLoading = false;
       final movieList = read(movieListProvider.notifier);
       movieList.addMovie(result["results"]);

@@ -73,7 +73,8 @@ class MoviesView extends ConsumerWidget {
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels ==
                 scrollInfo.metrics.maxScrollExtent) {
-              if (movieRepository.isMore && !movieRepository.isLoading) {
+              if (movieRepository.isMoreTrending &&
+                  !movieRepository.isLoading) {
                 if (movieRepository.type == MovieType.search) {
                   movieRepository.searchPage++;
                   movieRepository.fetchSearch();
@@ -105,6 +106,7 @@ class MoviesView extends ConsumerWidget {
                       movieRepository.keyword = value;
                       movieRepository.type = MovieType.search;
                       movieRepository.searchPage = 1;
+                      movieRepository.isMoreSearch = true;
                       var result = await movieRepository.fetchSearch();
                       ref.read(movieListProvider.notifier).addMovie(result);
                     },
@@ -117,6 +119,7 @@ class MoviesView extends ConsumerWidget {
                             movieRepository.keyword = search.text;
                             movieRepository.type = MovieType.search;
                             movieRepository.searchPage = 1;
+                            movieRepository.isMoreSearch = true;
                             var result = await movieRepository.fetchSearch();
                             ref
                                 .read(movieListProvider.notifier)
@@ -125,6 +128,7 @@ class MoviesView extends ConsumerWidget {
                             movieRepository.type = MovieType.trending;
                             movieRepository.keyword = "";
                             movieRepository.trendingPage = 1;
+                            movieRepository.isMoreTrending = true;
                             var result = await movieRepository.fetchPopular();
                             ref
                                 .read(movieListProvider.notifier)

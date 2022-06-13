@@ -72,7 +72,7 @@ class TvView extends ConsumerWidget {
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels ==
                 scrollInfo.metrics.maxScrollExtent) {
-              if (tvRepository.isMore && !tvRepository.isLoading) {
+              if (tvRepository.isMoreTrending && !tvRepository.isLoading) {
                 if (tvRepository.type == MovieType.search) {
                   tvRepository.searchPage++;
                   tvRepository.fetchSearch();
@@ -100,12 +100,13 @@ class TvView extends ConsumerWidget {
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.search,
                     onFieldSubmitted: (String value) async {
-                      ref.refresh(movieListProvider);
+                      ref.refresh(tvListProvider);
                       tvRepository.keyword = value;
+                      tvRepository.isMoreSearch = true;
                       tvRepository.type = TvType.search;
                       tvRepository.searchPage = 1;
                       var result = await tvRepository.fetchSearch();
-                      ref.read(movieListProvider.notifier).addMovie(result);
+                      ref.read(tvListProvider.notifier).addTv(result);
                     },
                     decoration: InputDecoration(
                       labelText: "Search Tv Series",
@@ -114,15 +115,15 @@ class TvView extends ConsumerWidget {
                           ref.refresh(tvListProvider);
                           if (tvRepository.type == TvType.trending) {
                             tvRepository.type = TvType.search;
-                            tvRepository.searchPage =
-                                tvRepository.searchPage + 1;
+                            tvRepository.searchPage = 1;
+                            tvRepository.isMoreSearch = true;
                             var result = await tvRepository.fetchSearch();
                             ref.read(tvListProvider.notifier).addTv(result);
                           } else {
                             tvRepository.type = TvType.trending;
                             tvRepository.keyword = "";
-                            tvRepository.trendingPage =
-                                tvRepository.trendingPage + 1;
+                            tvRepository.isMoreTrending = true;
+                            tvRepository.trendingPage = 1;
                             var result = await tvRepository.fetchPopular();
                             ref.read(tvListProvider.notifier).addTv(result);
                           }
@@ -240,27 +241,6 @@ class TvView extends ConsumerWidget {
                   childCount: tvList.length,
                 ),
               ),
-              // SliverToBoxAdapter(
-              //   child: Container(
-              //     child: tvRepository.isMore
-              //         ? TextButton(
-              //             onPressed: () async {
-              //               tvRepository.page = tvRepository.page + 1;
-              //               if (tvRepository.type == TvType.trending) {
-              //                 var result = await tvRepository.fetchPopular();
-              //                 ref.read(tvListProvider.notifier).addTv(result);
-              //               } else {
-              //                 var result = await tvRepository.fetchSearch();
-              //                 ref.read(tvListProvider.notifier).addTv(result);
-              //               }
-              //             },
-              //             child: const Text(
-              //               "PAGINATION",
-              //             ),
-              //           )
-              //         : const Text("NO MORE"),
-              //   ),
-              // ),
             ],
           ),
         );
