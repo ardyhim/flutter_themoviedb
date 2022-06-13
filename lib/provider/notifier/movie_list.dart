@@ -6,4 +6,8 @@ class MovieListNotifier extends StateNotifier<List<dynamic>> {
   addMovie(List<dynamic> data) {
     state = [...state, ...data];
   }
+
+  clear() {
+    state = [];
+  }
 }

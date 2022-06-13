@@ -17,62 +17,20 @@ class TvRepository {
   final Reader read;
   final TMDB tmdb;
   TvType type;
-  int page = 1;
+  int trendingPage = 1;
+  int searchPage = 1;
   String keyword = "";
   bool isMore = true;
   bool isLoading = false;
   late Map trending;
 
-  // Future<List> fetchPopular() async {
-  //   isLoading = true;
-  //   if (type != TvType.trending) page = 1;
-  //   if (!isMore) return List.empty();
-  //   if (page == 1) {
-  //     Map result = await tmdb.v3.trending.getTrending(
-  //       mediaType: MediaType.tv,
-  //       page: page,
-  //     );
-  //     if (result["results"].length <= 19) isMore = false;
-  //     trending = result;
-  //     return trending["results"];
-  //   } else {
-  //     Map result = await tmdb.v3.trending.getTrending(
-  //       mediaType: MediaType.tv,
-  //       page: page,
-  //     );
-  //     if (result["results"].length <= 19) isMore = false;
-  //     trending["results"].addAll(result["results"]);
-  //     final tvList = read(tvListProvider.notifier);
-  //     tvList.addTv(result["results"]);
-  //     return result["results"];
-  //   }
-  // }
-
-  // Future<List> fetchSearch() async {
-  //   isLoading = true;
-  //   if (type != TvType.trending) page = 1;
-  //   if (!isMore) return [];
-  //   if (page == 1) {
-  //     Map result = await tmdb.v3.search.queryTvShows(keyword, page: page);
-  //     if (result["results"].length <= 19) isMore = false;
-  //     return result["results"];
-  //   } else {
-  //     Map result = await tmdb.v3.search.queryTvShows(keyword, page: page);
-  //     if (result["results"].length <= 19) isMore = false;
-  //     final tvList = read(tvListProvider.notifier);
-  //     tvList.addTv(result["results"]);
-  //     return result["results"];
-  //   }
-  // }
-
   Future<List> fetchPopular() async {
     isLoading = true;
-    if (type != TvType.trending) page = 1;
     if (!isMore) return List.empty();
-    if (page == 1) {
+    if (trendingPage == 1) {
       Map result = await tmdb.v3.trending.getTrending(
         mediaType: MediaType.tv,
-        page: page,
+        page: trendingPage,
       );
       if (result["results"].length <= 19) isMore = false;
       trending = result;
@@ -81,7 +39,7 @@ class TvRepository {
     } else {
       Map result = await tmdb.v3.trending.getTrending(
         mediaType: MediaType.tv,
-        page: page,
+        page: trendingPage,
       );
       if (result["results"].length <= 19) isMore = false;
       trending["results"].addAll(result["results"]);
@@ -94,15 +52,14 @@ class TvRepository {
 
   Future<List> fetchSearch() async {
     isLoading = true;
-    if (type != TvType.search) page = 1;
     if (!isMore) return [];
-    if (page == 1) {
-      Map result = await tmdb.v3.search.queryTvShows(keyword, page: page);
+    if (searchPage == 1) {
+      Map result = await tmdb.v3.search.queryTvShows(keyword, page: searchPage);
       if (result["results"].length <= 19) isMore = false;
       isLoading = false;
       return result["results"];
     } else {
-      Map result = await tmdb.v3.search.queryTvShows(keyword, page: page);
+      Map result = await tmdb.v3.search.queryTvShows(keyword, page: searchPage);
       if (result["results"].length <= 19) isMore = false;
       isLoading = false;
       final movieList = read(tvListProvider.notifier);

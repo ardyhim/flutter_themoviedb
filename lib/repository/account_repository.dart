@@ -32,23 +32,25 @@ class AccountRepository {
       isFavorite: isFavorite,
     );
     final account = read(accountProvider.notifier);
-    var favoriteResponse;
     if (mediaType == MediaType.movie) {
-      favoriteResponse = await tmdb.v3.account.getFavoriteMovies(
+      var movie = await tmdb.v3.account.getFavoriteMovies(
         session,
         accountId,
         sortBy: SortBy.createdAtDes,
       );
+      var data = account.data;
+      data.movie = movie["results"];
+      account.add(data);
     } else {
-      favoriteResponse = await tmdb.v3.account.getFavoriteTvShows(
+      var tv = await tmdb.v3.account.getFavoriteTvShows(
         session,
         accountId,
         sortBy: SortBy.createdAtDes,
       );
+      var data = account.data;
+      data.tv = tv["results"];
+      account.add(data);
     }
-    var data = account.data;
-    data.movie = favoriteResponse["results"];
-    account.add(data);
     return response;
   }
 

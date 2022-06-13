@@ -73,10 +73,11 @@ class TvView extends ConsumerWidget {
             if (scrollInfo.metrics.pixels ==
                 scrollInfo.metrics.maxScrollExtent) {
               if (tvRepository.isMore && !tvRepository.isLoading) {
-                tvRepository.page++;
                 if (tvRepository.type == MovieType.search) {
+                  tvRepository.searchPage++;
                   tvRepository.fetchSearch();
                 } else {
+                  tvRepository.trendingPage++;
                   tvRepository.fetchPopular();
                 }
               }
@@ -99,13 +100,12 @@ class TvView extends ConsumerWidget {
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.search,
                     onFieldSubmitted: (String value) async {
-                      ref.read(tvRepositoryProvider).keyword = value;
-                      ref.read(tvTypeProvider.state).state = TvType.search;
+                      ref.refresh(movieListProvider);
+                      tvRepository.keyword = value;
                       tvRepository.type = TvType.search;
-                      ref.refresh(tvListProvider);
-                      tvRepository.page = tvRepository.page + 1;
+                      tvRepository.searchPage = 1;
                       var result = await tvRepository.fetchSearch();
-                      ref.read(tvListProvider.notifier).addTv(result);
+                      ref.read(movieListProvider.notifier).addMovie(result);
                     },
                     decoration: InputDecoration(
                       labelText: "Search Tv Series",
@@ -114,13 +114,15 @@ class TvView extends ConsumerWidget {
                           ref.refresh(tvListProvider);
                           if (tvRepository.type == TvType.trending) {
                             tvRepository.type = TvType.search;
-                            tvRepository.page = tvRepository.page + 1;
+                            tvRepository.searchPage =
+                                tvRepository.searchPage + 1;
                             var result = await tvRepository.fetchSearch();
                             ref.read(tvListProvider.notifier).addTv(result);
                           } else {
                             tvRepository.type = TvType.trending;
                             tvRepository.keyword = "";
-                            tvRepository.page = tvRepository.page + 1;
+                            tvRepository.trendingPage =
+                                tvRepository.trendingPage + 1;
                             var result = await tvRepository.fetchPopular();
                             ref.read(tvListProvider.notifier).addTv(result);
                           }

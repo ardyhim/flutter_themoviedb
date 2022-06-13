@@ -1,6 +1,7 @@
-import 'package:contoh/provider/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+
+import '../provider/state.dart';
 
 enum MovieType {
   search,
@@ -16,7 +17,8 @@ class MovieRepository {
   final Reader read;
   final TMDB tmdb;
   MovieType type;
-  int page = 1;
+  int trendingPage = 1;
+  int searchPage = 1;
   String keyword = "";
   bool isMore = true;
   bool isLoading = false;
@@ -24,12 +26,12 @@ class MovieRepository {
 
   Future<List> fetchPopular() async {
     isLoading = true;
-    if (type != MovieType.trending) page = 1;
     if (!isMore) return List.empty();
-    if (page == 1) {
+    if (trendingPage == 1) {
       Map result = await tmdb.v3.trending.getTrending(
         mediaType: MediaType.movie,
-        page: page,
+        timeWindow: TimeWindow.day,
+        page: trendingPage,
       );
       if (result["results"].length <= 19) isMore = false;
       trending = result;
@@ -38,7 +40,8 @@ class MovieRepository {
     } else {
       Map result = await tmdb.v3.trending.getTrending(
         mediaType: MediaType.movie,
-        page: page,
+        timeWindow: TimeWindow.day,
+        page: trendingPage,
       );
       if (result["results"].length <= 19) isMore = false;
       trending["results"].addAll(result["results"]);
@@ -51,15 +54,14 @@ class MovieRepository {
 
   Future<List> fetchSearch() async {
     isLoading = true;
-    if (type != MovieType.search) page = 1;
     if (!isMore) return [];
-    if (page == 1) {
-      Map result = await tmdb.v3.search.queryMovies(keyword, page: page);
+    if (searchPage == 1) {
+      Map result = await tmdb.v3.search.queryMovies(keyword, page: searchPage);
       if (result["results"].length <= 19) isMore = false;
       isLoading = false;
       return result["results"];
     } else {
-      Map result = await tmdb.v3.search.queryMovies(keyword, page: page);
+      Map result = await tmdb.v3.search.queryMovies(keyword, page: searchPage);
       if (result["results"].length <= 19) isMore = false;
       isLoading = false;
       final movieList = read(movieListProvider.notifier);
